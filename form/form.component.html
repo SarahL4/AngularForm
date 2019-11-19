@@ -1,0 +1,74 @@
+<p>form works!</p>
+
+<form [formGroup]="myForm" [hidden]="success" (ngSubmit)="submitHandler()">
+  value: {{ myForm.value |json }}
+  <hr />
+  <mat-form-field>
+    <input matInput placeholder="email" formControlName="email" autocomplete="on">
+
+    <mat-error *ngIf="email.invalid && email.touched">Your email does not correct or touched</mat-error>
+    <mat-hint align="end">Must har @</mat-hint>
+  </mat-form-field><br /><br />
+
+  <mat-form-field>
+    <input matInput placeholder="age" [value]="0" formControlName="age" autocomplete="on">
+
+    <mat-hint align="end">Must filled</mat-hint>
+    <mat-error *ngIf="age.invalid && age.touched">Your age does not correct or touched</mat-error>
+    <mat-error *ngIf="age.errors?.min && age.touched">
+      {{ age.errors.min.actual }} is too young to use this app
+    </mat-error>
+    <mat-error *ngIf="age.errors?.max && age.touched">
+      {{ age.errors.min.actual }} is too old to use this app
+    </mat-error>
+  </mat-form-field><br /><br />
+
+  <h4>Cell Phone</h4>
+
+  <div formArrayName="phones">
+    <div *ngFor="let phone of phoneForms.controls; let i=index" [formGroupName]="i">
+      <mat-form-field>
+        <input matInput placeholder="area" formControlName="area">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="prefix" formControlName="prefix">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="line" formControlName="line">
+      </mat-form-field>
+
+      <button mat-raised-button color="warn" (click)="deletePhone(i)">Delete</button>
+
+    </div>
+  </div>
+
+  <button mat-raised-button color="primary" (click)="addPhone()">Add Phone number</button>
+
+  <!--<div formGroupName="cellphone">
+    <mat-form-field>
+      <input matInput placeholder="area" formControlName="area">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="prefix" formControlName="prefix">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="line" formControlName="line">
+    </mat-form-field>
+   </div>-->
+
+  <hr />
+  <br />
+  <mat-form-field class="example-full-width">
+    <textarea matInput placeholder="your message..." formControlName="message"></textarea>
+  </mat-form-field>
+  <br />
+  <mat-checkbox formControlName="agree" color="primary">Are you sure?</mat-checkbox><hr />
+  <br />
+
+  <button mat-raised-button [disabled]="myForm.invalid" color="primary">Submit</button>
+
+</form>
+
+<div *ngIf="success" class="notification is-success">
+  Yay! We received your submission! Tack!
+</div>
